@@ -367,6 +367,69 @@
             color: white;
         }
 
+        /* --- ROUTES EDITOR STYLES --- */
+        .routes-editor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .route-block {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .route-header-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .route-method-select {
+            flex: 0 0 80px;
+            padding: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            background: var(--bg-app);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 4px;
+        }
+
+        .route-path-input {
+            flex: 1;
+            padding: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 4px;
+        }
+        .route-path-input:focus { border-color: var(--accent); }
+
+        .route-desc-input {
+            width: 100%;
+            padding: 6px;
+            font-size: 0.85em;
+            background: rgba(0,0,0,0.15);
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 50px;
+        }
+        .route-desc-input:focus { 
+            border-color: var(--accent); 
+            color: var(--text-main);
+        }
+
+
         /* --- BUTTONS --- */
         .btn {
             padding: 8px 16px;
@@ -515,6 +578,17 @@
                 </button>
             </div>
 
+            <!-- NEW ROUTES/ENDPOINTS EDITOR -->
+            <div class="form-group">
+                <label>Routes / Endpoints API</label>
+                <div class="routes-editor-container" id="routes-editor-container">
+                    <!-- Routes will be dynamically added here -->
+                </div>
+                <button class="btn-add-table" id="btn-add-route">
+                    <i class="fa-solid fa-route"></i> Ajouter une Route
+                </button>
+            </div>
+
             <button class="btn btn-danger" onclick="app.deleteSelectedNode()">
                 <i class="fa-solid fa-trash"></i> Supprimer
             </button>
@@ -546,6 +620,7 @@
                 this.svgLayer = document.getElementById('connections-layer');
                 this.inspector = document.getElementById('inspector');
                 this.dataEditorContainer = document.getElementById('data-editor-tables');
+                this.routesEditorContainer = document.getElementById('routes-editor-container');
                 
                 // Initialize
                 this.bindEvents();
@@ -600,6 +675,12 @@
                 // "Add Table" Button
                 document.getElementById('btn-add-table').addEventListener('click', () => {
                     this.addTableBlock();
+                    this.updateNodeDataFromForm();
+                });
+
+                // "Add Route" Button
+                document.getElementById('btn-add-route').addEventListener('click', () => {
+                    this.addRouteBlock();
                     this.updateNodeDataFromForm();
                 });
             }
@@ -740,6 +821,93 @@
                 return tables;
             }
 
+            // --- ROUTES EDITOR LOGIC ---
+
+            addRouteBlock(routeData = { method: 'GET', path: '/api/endpoint', description: '' }) {
+                const routeBlock = document.createElement('div');
+                routeBlock.className = 'route-block';
+                
+                // 1. Header Row (Method + Path + Delete)
+                const headerRow = document.createElement('div');
+                headerRow.className = 'route-header-row';
+
+                // Method Select
+                const methodSelect = document.createElement('select');
+                methodSelect.className = 'route-method-select';
+                const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+                methods.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.innerText = m;
+                    if (m === routeData.method) opt.selected = true;
+                    methodSelect.appendChild(opt);
+                });
+                methodSelect.addEventListener('change', () => this.updateNodeDataFromForm());
+
+                // Path Input
+                const pathInput = document.createElement('input');
+                pathInput.type = 'text';
+                pathInput.className = 'route-path-input';
+                pathInput.value = routeData.path;
+                pathInput.placeholder = '/api/resource';
+                pathInput.addEventListener('input', () => this.updateNodeDataFromForm());
+
+                // Delete Button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-icon btn-delete-route';
+                deleteBtn.title = 'Supprimer la route';
+                deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if(confirm('Supprimer cette route ?')) {
+                        routeBlock.remove();
+                        this.updateNodeDataFromForm();
+                    }
+                });
+
+                headerRow.appendChild(methodSelect);
+                headerRow.appendChild(pathInput);
+                headerRow.appendChild(deleteBtn);
+
+                // 2. Description Input
+                const descInput = document.createElement('textarea');
+                descInput.className = 'route-desc-input';
+                descInput.value = routeData.description;
+                descInput.placeholder = 'Description de l\'endpoint (ex: Récupère la liste des utilisateurs)';
+                descInput.addEventListener('input', () => this.updateNodeDataFromForm());
+
+                // Assemble Block
+                routeBlock.appendChild(headerRow);
+                routeBlock.appendChild(descInput);
+
+                this.routesEditorContainer.appendChild(routeBlock);
+            }
+
+            renderRoutesEditor(routes) {
+                this.routesEditorContainer.innerHTML = '';
+                if (!routes || routes.length === 0) return;
+                
+                routes.forEach(route => {
+                    this.addRouteBlock(route);
+                });
+            }
+
+            getRoutesFromEditor() {
+                const routes = [];
+                const routeBlocks = this.routesEditorContainer.querySelectorAll('.route-block');
+                
+                routeBlocks.forEach(block => {
+                    const method = block.querySelector('.route-method-select').value;
+                    const path = block.querySelector('.route-path-input').value.trim();
+                    const description = block.querySelector('.route-desc-input').value.trim();
+                    
+                    if (path) {
+                        routes.push({ method, path, description });
+                    }
+                });
+                return routes;
+            }
+
             // --- NODE LOGIC ---
 
             createNode(type, x, y) {
@@ -756,7 +924,9 @@
                     port: defaults.port,
                     desc: '',
                     // Now an array of Table objects: [{ name: 'Users', fields: [...] }]
-                    dataModels: defaults.dataModels || [] 
+                    dataModels: defaults.dataModels || [],
+                    // Routes/Endpoints array: [{ method: 'GET', path: '/api/users', description: '...' }]
+                    routes: defaults.routes || []
                 };
 
                 this.nodes.push(nodeData);
@@ -766,8 +936,25 @@
 
             getNodeDefaults(type) {
                 switch(type) {
-                    case 'frontend': return { name: 'WebApp', tech: 'React/Vite', port: 3000 };
-                    case 'backend': return { name: 'API Gateway', tech: 'Node.js', port: 8080 };
+                    case 'frontend': return { 
+                        name: 'WebApp', 
+                        tech: 'React/Vite', 
+                        port: 3000,
+                        routes: [
+                            { method: 'GET', path: '/', description: 'Page d\'accueil' },
+                            { method: 'GET', path: '/dashboard', description: 'Tableau de bord' }
+                        ]
+                    };
+                    case 'backend': return { 
+                        name: 'API Gateway', 
+                        tech: 'Node.js', 
+                        port: 8080,
+                        routes: [
+                            { method: 'GET', path: '/api/health', description: 'Health check' },
+                            { method: 'GET', path: '/api/users', description: 'Liste des utilisateurs' },
+                            { method: 'POST', path: '/api/users', description: 'Créer un utilisateur' }
+                        ]
+                    };
                     case 'database': return { 
                         name: 'Main DB', 
                         tech: 'PostgreSQL', 
@@ -801,6 +988,10 @@
                 const tableCount = data.dataModels ? data.dataModels.length : 0;
                 const tableText = tableCount > 0 ? `${tableCount} Table${tableCount > 1 ? 's' : ''}` : '';
 
+                // Count total routes
+                const routeCount = data.routes ? data.routes.length : 0;
+                const routeText = routeCount > 0 ? `${routeCount} Route${routeCount > 1 ? 's' : ''}` : '';
+
                 el.innerHTML = `
                     <div class="node-header">
                         <i class="fa-solid ${icon}"></i> 
@@ -817,6 +1008,12 @@
                         <div class="node-data-preview" style="font-size:0.75em; color:var(--text-muted); margin-top:4px;">
                             <i class="fa-solid fa-table"></i> 
                             <span class="data-count">${tableText}</span>
+                        </div>` : ''}
+                        
+                        ${routeText ? `
+                        <div class="node-routes-preview" style="font-size:0.75em; color:var(--text-muted); margin-top:4px;">
+                            <i class="fa-solid fa-route"></i> 
+                            <span class="routes-count">${routeText}</span>
                         </div>` : ''}
                     </div>
                     <div class="port input" title="Input"></div>
@@ -889,6 +1086,9 @@
                     
                     // Render Multi-table editor
                     this.renderDataEditor(node.dataModels);
+                    
+                    // Render Routes editor
+                    this.renderRoutesEditor(node.routes);
                 }
             }
 
@@ -903,6 +1103,9 @@
                 
                 // Get data from graphical editor
                 node.dataModels = this.getDataTablesFromEditor();
+                
+                // Get routes from graphical editor
+                node.routes = this.getRoutesFromEditor();
 
                 // Update DOM
                 const el = document.getElementById(node.id);
@@ -910,17 +1113,32 @@
                 el.querySelector('.node-tech').innerText = node.tech;
                 el.querySelector('.node-port').innerText = node.port ? `:${node.port}` : '';
                 
-                // Update count display
-                const countDisplay = el.querySelector('.data-count');
+                // Update count displays
                 const tableCount = node.dataModels.length;
-                if (tableCount > 0) {
-                     if (countDisplay) {
-                         countDisplay.innerText = `${tableCount} Table${tableCount > 1 ? 's' : ''}`;
-                     } else {
-                         el.remove();
-                         this.renderNode(node);
-                         document.getElementById(node.id).classList.add('selected');
-                     }
+                const routeCount = node.routes.length;
+                
+                // If counts changed, re-render the node to update displays
+                const currentDataCount = el.querySelector('.data-count');
+                const currentRouteCount = el.querySelector('.routes-count');
+                
+                const needsRerender = 
+                    (tableCount > 0 && !currentDataCount) || 
+                    (tableCount === 0 && currentDataCount) ||
+                    (routeCount > 0 && !currentRouteCount) || 
+                    (routeCount === 0 && currentRouteCount);
+                
+                if (needsRerender) {
+                    el.remove();
+                    this.renderNode(node);
+                    document.getElementById(node.id).classList.add('selected');
+                } else {
+                    // Just update counts
+                    if (currentDataCount) {
+                        currentDataCount.innerText = `${tableCount} Table${tableCount > 1 ? 's' : ''}`;
+                    }
+                    if (currentRouteCount) {
+                        currentRouteCount.innerText = `${routeCount} Route${routeCount > 1 ? 's' : ''}`;
+                    }
                 }
             }
 
@@ -1035,6 +1253,18 @@
                     md += `- **Port:** ${node.port || 'N/A'}\n`;
                     if (node.desc) md += `- **Description:** ${node.desc}\n`;
                     
+                    // ROUTES/ENDPOINTS EXPORT
+                    if (node.routes && node.routes.length > 0) {
+                        md += `- **API Routes / Endpoints:**\n`;
+                        node.routes.forEach(route => {
+                            md += `  - **${route.method}** \`${route.path}\``;
+                            if (route.description) {
+                                md += ` - ${route.description}`;
+                            }
+                            md += `\n`;
+                        });
+                    }
+                    
                     // UPDATED EXPORT FOR MULTIPLE TABLES
                     if (node.dataModels && node.dataModels.length > 0) {
                         md += `- **Data Models / Schema:**\n`;
@@ -1070,6 +1300,7 @@
                 md += `   *Please ensure docker-compose ports match the specified ports above.*\n`;
                 md += `3. Core boilerplate code for the components listed.\n`;
                 md += `4. **IMPORTANT:** Generate the specific SQL schemas or Data Models (Mongoose/Prisma/TypeORM) exactly as defined in the Data Models section above.\n`;
+                md += `5. **IMPORTANT:** Implement the API routes/endpoints exactly as specified above, with proper request/response handling.\n`;
 
                 const blob = new Blob([md], { type: 'text/markdown' });
                 const url = URL.createObjectURL(blob);
