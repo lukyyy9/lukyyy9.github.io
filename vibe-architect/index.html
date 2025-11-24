@@ -1480,12 +1480,12 @@
                     md += `- **${src.name}** (:${src.port}) sends data to **${tgt.name}** (:${tgt.port})\n`;
                 });
 
-                md += `\n## 3. AI BOOTSTRAP INSTRUCTIONS\n`;
+                md += `\n## 3. INSTRUCTIONS\n`;
                 md += `Act as a Senior Software Architect. Based on the structure above, please generate:\n`;
                 md += `1. The project file structure.\n`;
                 md += `2. The necessary configuration files (Language/framework related configuration files (like package.json, composer.json, pom.xml...), Dockerfile(s), docker-compose.yml).\n`;
                 md += `   *Please ensure docker-compose ports match the specified ports above.*\n`;
-                md += `3. The complete source code for the components listed, with full logic and functionalities. The entire procedure will fail if any part is missing or incomplete.\n`;
+                md += `3. The complete, production-ready source code for all components. **STRICTLY FORBIDDEN:** usage of comments like \`// TODO\`, \`// Mock\`, \`// Implement later\`, or placeholder logic. You must implement FULL logic for every function. Authentication must be real (JWT/Session with DB check), database connections must be real (no in-memory arrays), and error handling must be implemented. The entire procedure will fail if any part is missing or incomplete.\n`;
                 md += `4. **IMPORTANT:** Generate the specific SQL schemas as defined in the Data Models section above.\n`;
                 md += `5. **IMPORTANT:** Implement the API routes/endpoints exactly as specified above, with proper request/response handling.\n`;
                 md += `Then, explain what the steps a developer should take next to start the development process based on this architecture.\n`;
