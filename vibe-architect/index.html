@@ -748,6 +748,13 @@
                     <li><strong>Données :</strong> Ajoutez des tables et des champs pour définir votre schéma de base de données.</li>
                     <li><strong>API :</strong> Définissez les routes et endpoints de vos services.</li>
                 </ul>
+
+                <h3>3. Exporter le Prompt IA</h3>
+                <ul>
+                    <li>Cliquez sur le bouton <strong>"Exporter Prompt IA"</strong> en haut à droite pour générer un prompt détaillé basé sur votre architecture.</li>
+                    <li>Placez le fichier dans <strong>/votreProjet/.github/copilot-instructions.md</strong></li>
+                    <li>Envoyez "build the app" à votre agent IA (Gemini 3 Pro conseillé)</li>
+                </ul>
             </div>
             <div class="modal-footer">
                 <label class="checkbox-wrapper">
@@ -1108,8 +1115,8 @@
                         ]
                     };
                     case 'backend': return { 
-                        name: 'API Gateway', 
-                        tech: 'Node.js', 
+                        name: 'Backend', 
+                        tech: 'Node.js/Express', 
                         port: 8080,
                         routes: [
                             { method: 'GET', path: '/api/health', description: 'Health check' },
