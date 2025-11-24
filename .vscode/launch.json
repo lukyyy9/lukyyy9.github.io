@@ -1,0 +1,17 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Run Vibe Architect Extension",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}/vibe-architect-vscode"
+			],
+			"outFiles": [
+				"${workspaceFolder}/vibe-architect-vscode/out/**/*.js"
+			],
+			"preLaunchTask": "npm: compile"
+		}
+	]
+}
