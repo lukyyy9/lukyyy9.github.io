@@ -561,6 +561,29 @@
         }
         .checkbox-wrapper input { width: auto; margin: 0; cursor: pointer; }
 
+        /* Style Selection */
+        .style-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .style-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+        .style-option:hover {
+            color: var(--text-main);
+        }
+        .style-option input[type="radio"] {
+            accent-color: var(--accent);
+            margin: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -591,6 +614,29 @@
             <div class="sidebar-group">
                 <h3>Description du Projet</h3>
                 <textarea id="global-desc" class="sidebar-input" rows="3" placeholder="Contexte global (ex: E-commerce B2B...)"></textarea>
+            </div>
+
+            <!-- Project Style Selection -->
+            <div class="sidebar-group">
+                <h3>Style</h3>
+                <div class="style-options">
+                    <label class="style-option" title="Une interface utilisateur ultra-épurée et professionnelle au style 'Swiss Design', privilégiant de vastes espaces blancs, une grille stricte, une typographie sans-serif noire et une seule couleur d'accentuation bleue.">
+                        <input type="radio" name="project-style" value="minimaliste" checked>
+                        <span>Le Minimaliste Corporatif</span>
+                    </label>
+                    <label class="style-option" title="Un design vibrant et énergique inspiré du 'Neo-Brutalism', caractérisé par des couleurs saturées, des bordures noires épaisses, des ombres portées dures et des illustrations 3D abstraites.">
+                        <input type="radio" name="project-style" value="ludique">
+                        <span>Le Ludique & &quot;Pop&quot;</span>
+                    </label>
+                    <label class="style-option" title="Une esthétique 'Dark Mode' immersive utilisant le 'Glassmorphism', avec des cartes translucides à effet de flou, des dégradés néon subtils en arrière-plan et des icônes filaires lumineuses.">
+                        <input type="radio" name="project-style" value="futuriste">
+                        <span>Le Futuriste Sombre</span>
+                    </label>
+                    <label class="style-option" title="Un style visuel doux et sophistiqué utilisant une palette de couleurs pastel 'terreuses', des formes aux coins très arrondis, des textures papier subtiles et une typographie serif élégante.">
+                        <input type="radio" name="project-style" value="organique">
+                        <span>L'Organique & Zen</span>
+                    </label>
+                </div>
             </div>
 
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
@@ -1373,11 +1419,21 @@
                     return;
                 }
 
+                // Get selected style
+                const selectedStyleInput = document.querySelector('input[name="project-style"]:checked');
+                const styleName = selectedStyleInput ? selectedStyleInput.nextElementSibling.innerText : 'Non spécifié';
+                const styleDesc = selectedStyleInput ? selectedStyleInput.parentElement.getAttribute('title') : '';
+
                 let md = `# SYSTEM ARCHITECTURE SPECIFICATION\n`;
 
                 if (this.projectDescription) {
                     md += `> **Project Context / Goal:**\n`;
                     md += `> ${this.projectDescription}\n\n`;
+                }
+
+                if (styleName) {
+                    md += `> **Visual Style:** ${styleName}\n`;
+                    if (styleDesc) md += `> *${styleDesc}*\n\n`;
                 }
                 
                 md += `## 1. ARCHITECTURE OVERVIEW\n\n`;
