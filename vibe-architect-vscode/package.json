@@ -1,9 +1,23 @@
 {
   "name": "vibe-architect-vscode",
   "displayName": "Vibe Architect",
+  "icon": "logo.png",
   "publisher": "luky9",
   "description": "Visual Software Architecture Designer for AI Agents",
-  "version": "0.0.1",
+  "keywords": [
+    "architecture",
+    "diagram",
+    "ai",
+    "copilot",
+    "prompt-engineering",
+    "visualizer",
+    "design"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukyyy9/vibe-architect-vscode"
+  },
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.80.0"
   },
