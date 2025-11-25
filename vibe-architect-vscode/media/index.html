@@ -598,11 +598,11 @@
             <button class="btn" style="background: var(--bg-node); border: 1px solid var(--border-color); color: var(--text-muted);" onclick="app.openGuide()">
                 <i class="fa-solid fa-book"></i> Guide
             </button>
+            <!--<button class="btn btn-primary" onclick="app.exportToMarkdown()">
+                <i class="fa-solid fa-file-export"></i> Exporter Prompt
+            </button>-->
             <button class="btn" style="background: var(--accent); color: white; border: 1px solid var(--accent);" onclick="app.buildWithCopilot()">
                 <i class="fa-solid fa-robot"></i> Générer l'App
-            </button>
-            <button class="btn btn-primary" onclick="app.exportToMarkdown()">
-                <i class="fa-solid fa-file-export"></i> Exporter Prompt
             </button>
         </div>
     </header>
@@ -765,6 +765,35 @@
                     Ne plus afficher ce guide au démarrage
                 </label>
                 <button class="btn btn-primary" onclick="app.closeGuide()">Compris !</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COPILOT CONFIRM MODAL -->
+    <div class="modal-overlay" id="copilot-modal">
+        <div class="modal-content" style="width: 500px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-robot" style="color: var(--accent); margin-right: 10px;"></i> Prêt à générer ?</h2>
+                <button class="modal-close" onclick="app.closeCopilotModal()"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px;">Avant de lancer la génération, veuillez confirmer les points suivants pour une expérience optimale :</p>
+                
+                <label class="checkbox-wrapper" style="margin-bottom: 10px;">
+                    <input type="checkbox" id="check-agent-mode" onchange="app.checkCopilotReady()">
+                    J'ai activé le mode Agent de Github Copilot
+                </label>
+                
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check-model-select" onchange="app.checkCopilotReady()">
+                    J'ai sélectionné le modèle de mon choix (Gemini 3 Pro conseillé)
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);" onclick="app.closeCopilotModal()">Annuler</button>
+                <button class="btn btn-primary" id="btn-confirm-generate" onclick="app.confirmBuildWithCopilot()" disabled style="opacity: 0.5; cursor: not-allowed;">
+                    Générer l'App
+                </button>
             </div>
         </div>
     </div>
@@ -1421,18 +1450,52 @@
                 }
             }
 
-            // --- EXPORT LOGIC ---
+            // --- COPILOT MODAL LOGIC ---
 
-            async buildWithCopilot() {
-                alert("⚠️ Important : Veuillez régler le mode de l'IA sur 'Agent' et sélectionner votre LLM préféré (Gemini 3 Pro conseillé) dans la fenêtre de chat avant de confirmer.");
+            openCopilotModal() {
+                document.getElementById('copilot-modal').classList.add('active');
+                // Reset state
+                document.getElementById('check-agent-mode').checked = false;
+                document.getElementById('check-model-select').checked = false;
+                this.checkCopilotReady();
+            }
+
+            closeCopilotModal() {
+                document.getElementById('copilot-modal').classList.remove('active');
+            }
+
+            checkCopilotReady() {
+                const check1 = document.getElementById('check-agent-mode').checked;
+                const check2 = document.getElementById('check-model-select').checked;
+                const btn = document.getElementById('btn-confirm-generate');
+                
+                if (check1 && check2) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                } else {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                }
+            }
+
+            async confirmBuildWithCopilot() {
+                this.closeCopilotModal();
                 await this.exportToMarkdown();
                 
                 // Send command to open Copilot
                 vscode.postMessage({
                     command: 'openCopilot',
-                    query: '@workspace Build the app based on the architecture defined in .github/copilot-instructions.md. Follow the instructions in that file strictly.'
+                    query: 'Build the app'
                 });
             }
+
+            buildWithCopilot() {
+                this.openCopilotModal();
+            }
+
+            // --- EXPORT LOGIC ---
 
             async exportToMarkdown() {
                 if (this.nodes.length === 0) {
