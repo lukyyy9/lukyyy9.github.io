@@ -1,6 +1,7 @@
 {
   "name": "vibe-architect-vscode",
   "displayName": "Vibe Architect",
+  "publisher": "luky9",
   "description": "Visual Software Architecture Designer for AI Agents",
   "version": "0.0.1",
   "engines": {
@@ -16,7 +17,7 @@
     "commands": [
       {
         "command": "vibe-architect.open",
-        "title": "Vibe Architect: Open Designer",
+        "title": "Open",
         "category": "Vibe Architect"
       }
     ]

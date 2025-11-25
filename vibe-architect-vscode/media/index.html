@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -602,7 +602,7 @@
                 <i class="fa-solid fa-file-export"></i> Exporter Prompt
             </button>-->
             <button class="btn" style="background: var(--accent); color: white; border: 1px solid var(--accent);" onclick="app.buildWithCopilot()">
-                <i class="fa-solid fa-robot"></i> Générer l'App
+                <i class="fa-solid fa-robot"></i> Generate App
             </button>
         </div>
     </header>
@@ -615,36 +615,36 @@
             
             <!-- Project Global Description -->
             <div class="sidebar-group">
-                <h3>Description du Projet</h3>
-                <textarea id="global-desc" class="sidebar-input" rows="3" placeholder="Contexte global (ex: E-commerce B2B...)"></textarea>
+                <h3>Project Description</h3>
+                <textarea id="global-desc" class="sidebar-input" rows="3" placeholder="Global context (e.g., B2B E-commerce...)"></textarea>
             </div>
 
             <!-- Project Style Selection -->
             <div class="sidebar-group">
                 <h3>Style</h3>
                 <div class="style-options">
-                    <label class="style-option" title="Design d'interface utilisateur (UI) pour une app haut de gamme. Style 'Swiss International Design' : ultra-minimaliste, fond blanc pur avec une utilisation généreuse de l'espace négatif (whitespace). Typographie San-Serif audacieuse et noire (type Helvetica Now). Palette de couleurs monochrome avec une seule couleur d'accent. Boutons subtils avec ombres portées très douces pour la profondeur. Mise en page en grille stricte, icônes font-awesome propres.">
+                    <label class="style-option" title="High-end app UI design. 'Swiss International Design' style: ultra-minimalist, pure white background with generous use of negative space (whitespace). Bold black Sans-Serif typography (like Helvetica Now). Monochrome color palette with a single accent color. Subtle buttons with very soft drop shadows for depth. Strict grid layout, clean font-awesome icons.">
                         <input type="radio" name="project-style" value="minimaliste" checked>
-                        <span>SaaS Premium</span>
+                        <span>Premium SaaS</span>
                     </label>
-                    <label class="style-option" title="Interface d'app en mode sombre (Dark Mode) utilisant le style 'Glassmorphism'. Des cartes et panneaux translucides avec un effet de flou d'arrière-plan (background blur) et des bordures blanches fines et lumineuses. Arrière-plan abstrait avec des 'Mesh Gradients' (dégradés fluides) aux teintes vives et profondes. Éléments 3D flottants subtils. Typographie blanche moderne et brillante. Effet de lueur diffuse autour des éléments interactifs. Texture givrée, aspect premium et technologique. Rendu style Dribbble top trend.">
+                    <label class="style-option" title="Dark Mode app interface using 'Glassmorphism' style. Translucent cards and panels with background blur effect and fine bright white borders. Abstract background with 'Mesh Gradients' (fluid gradients) in deep vivid hues. Subtle floating 3D elements. Modern bright white typography. Diffuse glow effect around interactive elements. Frosted texture, premium and technological look. Dribbble top trend style render.">
                         <input type="radio" name="project-style" value="ludique">
-                        <span>Glassmorphism Futuriste</span>
+                        <span>Futuristic Glassmorphism</span>
                     </label>
-                    <label class="style-option" title="Design d'interface utilisateur modulaire style 'Bento Box Grid'. L'écran est divisé en blocs rectangulaires et carrés parfaitement alignés avec des coins arrondis (squircle shapes). Fond gris clair très doux (#F5F5F7). Couleurs pastel douces pour catégoriser les informations, mélangées à des gris neutres. Typographie très lisible et hiérarchisée. Esthétique fonctionnelle, organisée et dense mais aérée. Style inspiré des 'Apple Human Interface Guidelines'.">
+                    <label class="style-option" title="Modular UI design 'Bento Box Grid' style. Screen divided into perfectly aligned rectangular and square blocks with rounded corners (squircle shapes). Very soft light gray background (#F5F5F7). Soft pastel colors to categorize information, mixed with neutral grays. Highly readable and hierarchical typography. Functional, organized, dense yet airy aesthetic. Inspired by 'Apple Human Interface Guidelines'.">
                         <input type="radio" name="project-style" value="futuriste">
                         <span>Bento Grid</span>
                     </label>
-                    <label class="style-option" title="Interface utilisateur mobile style 'Neo-Brutalism' moderne. Couleurs à fort contraste : fond d'une couleur claire vive avec texte noir massif et bordures épaisses noires non adoucies. Boutons rectangulaires avec des ombres dures (hard shadows) décalées à 45 degrés. Typographie décorative mélangeant des polices Serif et Sans-Serif. Utilisation d'éléments graphiques style collage et d'icônes style industriel ou rétro. Esthétique brute, tendance, vibrante et interpellante. Mise en page asymétrique qui attire l'œil.">
+                    <label class="style-option" title="Modern 'Neo-Brutalism' mobile UI style. High contrast colors: bright light background with massive black text and thick unsoftened black borders. Rectangular buttons with hard shadows offset at 45 degrees. Decorative typography mixing Serif and Sans-Serif fonts. Use of collage-style graphic elements and industrial or retro icons. Raw, trendy, vibrant and challenging aesthetic. Asymmetrical layout that catches the eye.">
                         <input type="radio" name="project-style" value="organique">
-                        <span>Neo-Brutalism Pop</span>
+                        <span>Pop Neo-Brutalism</span>
                     </label>
                 </div>
             </div>
 
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
 
-            <h3>Composants</h3>
+            <h3>Components</h3>
             <div class="tool-item" draggable="true" data-type="frontend">
                 <i class="fa-solid fa-laptop-code"></i> Frontend App
             </div>
@@ -658,7 +658,7 @@
                 <i class="fa-solid fa-cloud"></i> Cloud Service
             </div>
             <div class="tool-item" draggable="true" data-type="custom">
-                <i class="fa-solid fa-cube"></i> Brique Générique
+                <i class="fa-solid fa-cube"></i> Generic Block
             </div>
         </div>
 
@@ -675,14 +675,14 @@
 
         <!-- INSPECTOR: PROPERTIES -->
         <div class="inspector" id="inspector">
-            <h3>Propriétés</h3>
+            <h3>Properties</h3>
             <div class="form-group">
-                <label>Nom du composant</label>
+                <label>Component Name</label>
                 <input type="text" id="prop-name" placeholder="Ex: Main Dashboard">
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Stack Tech</label>
+                    <label>Tech Stack</label>
                     <input type="text" id="prop-tech" placeholder="Ex: React">
                 </div>
                 <div class="form-group" style="flex: 0 0 80px;">
@@ -691,80 +691,80 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Description / Rôle</label>
-                <textarea id="prop-desc" rows="4" placeholder="Décrire la responsabilité..."></textarea>
+                <label>Description / Role</label>
+                <textarea id="prop-desc" rows="4" placeholder="Describe responsibility..."></textarea>
             </div>
             
             <!-- NEW MULTI-TABLE DATA EDITOR -->
             <div class="form-group">
-                <label>Modèles de Données / Tables</label>
+                <label>Data Models / Tables</label>
                 <div class="data-editor-container" id="data-editor-tables">
                     <!-- Tables will be dynamically added here -->
                 </div>
                 <button class="btn-add-table" id="btn-add-table">
-                    <i class="fa-solid fa-table"></i> Ajouter une Table
+                    <i class="fa-solid fa-table"></i> Add Table
                 </button>
             </div>
 
             <!-- NEW ROUTES/ENDPOINTS EDITOR -->
             <div class="form-group">
-                <label>Routes / Endpoints API</label>
+                <label>API Routes / Endpoints</label>
                 <div class="routes-editor-container" id="routes-editor-container">
                     <!-- Routes will be dynamically added here -->
                 </div>
                 <button class="btn-add-table" id="btn-add-route">
-                    <i class="fa-solid fa-route"></i> Ajouter une Route
+                    <i class="fa-solid fa-route"></i> Add Route
                 </button>
             </div>
 
             <button class="btn btn-danger" onclick="app.deleteSelectedNode()">
-                <i class="fa-solid fa-trash"></i> Supprimer
+                <i class="fa-solid fa-trash"></i> Delete
             </button>
         </div>
     </div>
 
     <!-- TOAST -->
-    <div class="toast" id="toast">Export généré !</div>
+    <div class="toast" id="toast">Export generated!</div>
 
     <!-- GUIDE MODAL -->
     <div class="modal-overlay" id="guide-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fa-solid fa-book" style="color: var(--accent); margin-right: 10px;"></i> Guide d'utilisation</h2>
+                <h2><i class="fa-solid fa-book" style="color: var(--accent); margin-right: 10px;"></i> User Guide</h2>
                 <button class="modal-close" onclick="app.closeGuide()"><i class="fa-solid fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <h3>Bienvenue dans Vibe Architect !</h3>
-                    Vibe Architech est un <strong>outil de conception d'architecture logicielle visuelle</strong> qui vous permet de créer des schémas d'applications en glissant-déposant des composants, en les configurant, puis en générant des prompts détaillés pour des agents IA comme Copilot ou Claude Code.
-                <h3>1. Conception de l'Architecture</h3>
+                <h3>Welcome to Vibe Architect!</h3>
+                    Vibe Architect is a <strong>visual software architecture design tool</strong> that allows you to create application diagrams by dragging and dropping components, configuring them, and then generating detailed prompts for AI agents like Copilot or Claude Code.
+                <h3>1. Architecture Design</h3>
                 <ul>
-                    <li><strong>Description :</strong> Décrivez brièvement le concept et les fonctionnalités principales de votre application.</li>
-                    <li><strong>Glisser-Déposer :</strong> Prenez des composants depuis la barre latérale gauche et déposez-les sur la grille.</li>
-                    <li><strong>Déplacer :</strong> Cliquez et maintenez l'en-tête d'un composant pour le déplacer.</li>
-                    <li><strong>Connecter :</strong> Drag-and-droppez entre les ports de sortie (droite) d'un composant et les ports d'entrée (gauche) d'un autre pour créer des connexions.</li>
+                    <li><strong>Description:</strong> Briefly describe the concept and main features of your application.</li>
+                    <li><strong>Drag & Drop:</strong> Take components from the left sidebar and drop them onto the grid.</li>
+                    <li><strong>Move:</strong> Click and hold a component header to move it.</li>
+                    <li><strong>Connect:</strong> Drag and drop between the output ports (right) of a component and the input ports (left) of another to create connections.</li>
                 </ul>
 
-                <h3>2. Configuration des Composants</h3>
+                <h3>2. Component Configuration</h3>
                 <ul>
-                    <li><strong>Sélectionner :</strong> Cliquez sur un composant pour ouvrir le panneau de propriétés à droite.</li>
-                    <li><strong>Détails :</strong> Modifiez le nom, la technologie, le port et la description.</li>
-                    <li><strong>Données :</strong> Ajoutez des tables et des champs pour définir votre schéma de base de données.</li>
-                    <li><strong>API :</strong> Définissez les routes et endpoints de vos services.</li>
+                    <li><strong>Select:</strong> Click on a component to open the properties panel on the right.</li>
+                    <li><strong>Details:</strong> Modify the name, technology, port, and description.</li>
+                    <li><strong>Data:</strong> Add tables and fields to define your database schema.</li>
+                    <li><strong>API:</strong> Define the routes and endpoints of your services.</li>
                 </ul>
 
-                <h3>3. Exporter le Prompt IA</h3>
+                <h3>3. Export AI Prompt</h3>
                 <ul>
-                    <li>Cliquez sur le bouton <strong>"Exporter Prompt IA"</strong> en haut à droite pour générer un prompt détaillé basé sur votre architecture.</li>
-                    <li>Le fichier sera automatiquement créé dans votre espace de travail.</li>
-                    <li>Envoyez "build the app" à votre agent IA (Gemini 3 Pro conseillé)</li>
+                    <li>Click the <strong>"Export AI Prompt"</strong> button at the top right to generate a detailed prompt based on your architecture.</li>
+                    <li>The file will be automatically created in your workspace.</li>
+                    <li>Send "build the app" to your AI agent (Gemini 3 Pro recommended)</li>
                 </ul>
             </div>
             <div class="modal-footer">
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="dont-show-guide">
-                    Ne plus afficher ce guide au démarrage
+                    Do not show this guide at startup
                 </label>
-                <button class="btn btn-primary" onclick="app.closeGuide()">Compris !</button>
+                <button class="btn btn-primary" onclick="app.closeGuide()">Got it!</button>
             </div>
         </div>
     </div>
@@ -773,26 +773,26 @@
     <div class="modal-overlay" id="copilot-modal">
         <div class="modal-content" style="width: 500px;">
             <div class="modal-header">
-                <h2><i class="fa-solid fa-robot" style="color: var(--accent); margin-right: 10px;"></i> Prêt à générer ?</h2>
+                <h2><i class="fa-solid fa-robot" style="color: var(--accent); margin-right: 10px;"></i> Ready to generate?</h2>
                 <button class="modal-close" onclick="app.closeCopilotModal()"><i class="fa-solid fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom: 15px;">Avant de lancer la génération, veuillez confirmer les points suivants pour une expérience optimale :</p>
+                <p style="margin-bottom: 15px;">Before starting generation, please confirm the following points for an optimal experience:</p>
                 
                 <label class="checkbox-wrapper" style="margin-bottom: 10px;">
                     <input type="checkbox" id="check-agent-mode" onchange="app.checkCopilotReady()">
-                    J'ai activé le mode Agent de Github Copilot
+                    I have enabled Github Copilot Agent mode
                 </label>
                 
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="check-model-select" onchange="app.checkCopilotReady()">
-                    J'ai sélectionné le modèle de mon choix (Gemini 3 Pro conseillé)
+                    I have selected the model of my choice (Gemini 3 Pro recommended)
                 </label>
             </div>
             <div class="modal-footer">
-                <button class="btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);" onclick="app.closeCopilotModal()">Annuler</button>
+                <button class="btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted);" onclick="app.closeCopilotModal()">Cancel</button>
                 <button class="btn btn-primary" id="btn-confirm-generate" onclick="app.confirmBuildWithCopilot()" disabled style="opacity: 0.5; cursor: not-allowed;">
-                    Générer l'App
+                    Generate App
                 </button>
             </div>
         </div>
@@ -903,13 +903,13 @@
                 nameInput.type = 'text';
                 nameInput.className = 'table-name-input';
                 nameInput.value = tableData.name;
-                nameInput.placeholder = 'Nom de la table';
+                nameInput.placeholder = 'Table Name';
                 nameInput.addEventListener('input', () => this.updateNodeDataFromForm());
 
                 // 3. Create Delete Button (Using DOM API for robust listener)
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'btn-icon btn-delete-table';
-                deleteBtn.title = 'Supprimer la table';
+                deleteBtn.title = 'Delete Table';
                 deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
                 
                 // FIX: Robust Delete Handler
@@ -935,7 +935,7 @@
                 // 5. "Add Field" Button inside table
                 const btnAddField = document.createElement('button');
                 btnAddField.className = 'btn-small-add';
-                btnAddField.innerHTML = '<i class="fa-solid fa-plus"></i> Ajouter un champ';
+                btnAddField.innerHTML = '<i class="fa-solid fa-plus"></i> Add Field';
                 btnAddField.addEventListener('click', () => {
                     this.addFieldRowToContainer(fieldsContainer);
                     this.updateNodeDataFromForm();
@@ -958,7 +958,7 @@
                 nameInput.type = 'text';
                 nameInput.className = 'data-field-name';
                 nameInput.value = fieldData.name;
-                nameInput.placeholder = 'Nom (ex: id)';
+                nameInput.placeholder = 'Name (ex: id)';
                 nameInput.addEventListener('input', () => this.updateNodeDataFromForm());
 
                 const typeSelect = document.createElement('select');
@@ -1057,7 +1057,7 @@
                 // Delete Button
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'btn-icon btn-delete-route';
-                deleteBtn.title = 'Supprimer la route';
+                deleteBtn.title = 'Delete Route';
                 deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
                 deleteBtn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1074,7 +1074,7 @@
                 const descInput = document.createElement('textarea');
                 descInput.className = 'route-desc-input';
                 descInput.value = routeData.description;
-                descInput.placeholder = 'Description de l\'endpoint (ex: Récupère la liste des utilisateurs)';
+                descInput.placeholder = 'Endpoint description (ex: Retrieves user list)';
                 descInput.addEventListener('input', () => this.updateNodeDataFromForm());
 
                 // Assemble Block
@@ -1142,8 +1142,8 @@
                         tech: 'React/Vite', 
                         port: 3000,
                         routes: [
-                            { method: 'GET', path: '/', description: 'Page d\'accueil' },
-                            { method: 'GET', path: '/dashboard', description: 'Tableau de bord' }
+                            { method: 'GET', path: '/', description: 'Home Page' },
+                            { method: 'GET', path: '/dashboard', description: 'Dashboard' }
                         ]
                     };
                     case 'backend': return { 
@@ -1152,8 +1152,8 @@
                         port: 8080,
                         routes: [
                             { method: 'GET', path: '/api/health', description: 'Health check' },
-                            { method: 'GET', path: '/api/users', description: 'Liste des utilisateurs' },
-                            { method: 'POST', path: '/api/users', description: 'Créer un utilisateur' }
+                            { method: 'GET', path: '/api/users', description: 'User List' },
+                            { method: 'POST', path: '/api/users', description: 'Create User' }
                         ]
                     };
                     case 'database': return { 
@@ -1413,7 +1413,7 @@
                     path.setAttribute("class", "connection");
                     path.setAttribute("d", this.calculateBezier(startX, startY, endX, endY));
                     path.addEventListener('click', (e) => {
-                        if(confirm('Supprimer cette connexion ?')) {
+                        if(confirm('Delete this connection?')) {
                             this.connections = this.connections.filter(c => c.id !== conn.id);
                             this.updateConnections();
                         }
@@ -1499,13 +1499,13 @@
 
             async exportToMarkdown() {
                 if (this.nodes.length === 0) {
-                    alert("Ajoutez des nœuds avant d'exporter.");
+                    alert("Add nodes before exporting.");
                     return;
                 }
 
                 // Get selected style
                 const selectedStyleInput = document.querySelector('input[name="project-style"]:checked');
-                const styleName = selectedStyleInput ? selectedStyleInput.nextElementSibling.innerText : 'Non spécifié';
+                const styleName = selectedStyleInput ? selectedStyleInput.nextElementSibling.innerText : 'Not specified';
                 const styleDesc = selectedStyleInput ? selectedStyleInput.parentElement.getAttribute('title') : '';
 
                 let md = `# SYSTEM ARCHITECTURE SPECIFICATION\n`;
