@@ -118,7 +118,7 @@
         // CONFIGURATION
         // ==========================================
         // URL de la Google Sheet (Nécessite un lien Apps Script commençant par script.google.com pour fonctionner)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuk1S7wzprce3et40_UXl15miOseedFQw3TvT3j62d7WnqxmtJG616ja2aWtmkazrO/exec"; 
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzMfAQRjUwLNxcIVLhF1d6-GBkXDQp2lXS0zQy7hSsEQjF2b0h2woggdKQAAdpQLKdl/exec"; 
         // URL pour lire les scores (Format CSV de votre document)
         const CSV_URL = "https://docs.google.com/spreadsheets/d/11Ekdo71LxlUFS6FpG1BzD4TVXBnQDxxrYKjIy5mxyPY/export?exportFormat=csv";
         // ==========================================
@@ -256,10 +256,10 @@
 
             if (hp <= smiteDamage) {
                 let diff = smiteDamage - hp;
-                endGame('Succès', `Précision optimale. Surdégâts : ${Math.round(diff)} PV.`, false, Math.round(diff));
+                endGame('Succes', `Précision optimale. Surdégâts : ${Math.round(diff)} PV.`, false, Math.round(diff));
             } else {
                 let diff = hp - smiteDamage;
-                endGame('Échec', `Exécution prématurée. Cible restante : ${Math.round(diff)} PV.`, true, null);
+                endGame('Echec', `Exécution prématurée. Cible restante : ${Math.round(diff)} PV.`, true, null);
             }
             updateUI();
         }
@@ -280,25 +280,26 @@
                 document.getElementById('arena').classList.add('shake');
             }
 
-            saveScore(status, detailsMsg, diffVal);
+            saveScore(isError, diffVal);
         }
 
-        function saveScore(status, details, diffVal) {
+        function saveScore(isError, diffVal) {
             if (!WEB_APP_URL || WEB_APP_URL.includes("...")) {
                 console.warn("URL Google Apps Script non configurée.");
                 return;
             }
 
-            const pseudo = document.getElementById('pseudo').value.trim().replace(/,/g, ' ');
+            const pseudo = document.getElementById('pseudo').value.trim().replace(/,/g, ' ') || 'anonymous';
             const timestamp = Date.now();
+            const dateStr = new Date().toISOString();
 
             const formData = new URLSearchParams();
-            formData.append('date', new Date().toLocaleString('fr-FR'));
-            formData.append('pseudo', pseudo);
-            formData.append('smiteDmg', smiteDamage);
-            formData.append('result', status);
-            formData.append('details', details);
+            // On envoie un format basique type Base de données (DB)
             formData.append('timestamp', timestamp);
+            formData.append('date', dateStr);
+            formData.append('pseudo', pseudo);
+            formData.append('smite_dmg', smiteDamage);
+            formData.append('success', isError ? '0' : '1');
             formData.append('diff', diffVal !== null ? diffVal : '');
 
             fetch(WEB_APP_URL, {
@@ -340,16 +341,16 @@
                 // Séparation par virgule
                 const cols = line.split(',');
                 
-                // On vérifie qu'on a bien toutes nos colonnes (les anciennes parties n'en auront pas assez)
-                if (cols.length >= 7) {
-                    const pseudo = cols[1];
-                    const smiteDmg = cols[2];
-                    const result = cols[3];
-                    const timestamp = parseInt(cols[5], 10);
-                    const diff = parseInt(cols[6], 10);
+                // Attendu : timestamp, date, pseudo, smite_dmg, success, diff
+                if (cols.length >= 6) {
+                    const timestamp = parseInt(cols[0], 10);
+                    const pseudo = cols[2] || "anonymous";
+                    const smiteDmg = cols[3];
+                    const success = cols[4];
+                    let diff = parseInt(cols[5], 10);
 
-                    // On ne garde que les "Succès" de moins de 7 jours
-                    if (result === 'Succès' && !isNaN(timestamp) && !isNaN(diff) && (now - timestamp) <= weekMs) {
+                    // Validation booléenne (1)
+                    if (success === '1' && !isNaN(diff)) {
                         scores.push({ pseudo, smiteDmg, diff });
                     }
                 }
