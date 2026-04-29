@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smitool - App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        background: '#000000',
+                        surface: '#121212',
+                        border: '#27272a',
+                        primary: '#6366f1',
+                        primaryHover: '#4f46e5',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: theme('colors.background'); }
+        .shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+            40%, 60% { transform: translate3d(3px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="text-zinc-300 antialiased min-h-screen flex flex-col items-center justify-center p-6 selection:bg-primary/30">
+
+    <div class="w-full max-w-2xl flex flex-col gap-8">
+        
+        <!-- Header SaaS -->
+        <div class="flex flex-col items-center gap-2">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h1 class="text-2xl font-semibold text-zinc-100 tracking-tight">Smitool</h1>
+            <p class="text-sm text-zinc-500">Module d'entraînement de précision</p>
+        </div>
+
+        <!-- Pseudo Input -->
+        <div class="w-full max-w-sm mx-auto flex flex-col gap-2">
+            <label for="pseudo" class="text-sm font-medium text-zinc-400">Pseudo</label>
+            <input type="text" id="pseudo" placeholder="Entrez votre pseudo..." class="bg-surface border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-zinc-600" />
+        </div>
+
+        <!-- Application Card -->
+        <div id="arena" class="bg-surface/80 backdrop-blur-xl border border-border p-8 rounded-2xl shadow-2xl relative">
+            
+            <!-- Top Status Bar -->
+            <div class="flex justify-center items-center mb-8 pb-4 border-b border-white/5">
+                <div class="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 flex items-center gap-2 text-sm">
+                    <span class="text-zinc-400">Dégâts requis :</span>
+                    <span id="smite-dmg-display" class="font-mono font-bold text-indigo-400">---</span>
+                </div>
+            </div>
+
+            <!-- Health Bar Container -->
+            <div class="relative w-full h-12 bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800/50 shadow-inner mb-6">
+                <!-- Fill -->
+                <div id="hp-fill" class="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-600 to-red-500 transition-none" style="width: 100%"></div>
+                
+                <!-- Text Overlap -->
+                <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                    <!-- Utilisation de mix-blend-mode pour le contraste ou text-shadow pour la lisibilité -->
+                    <span id="hp-text" class="text-white font-mono font-bold tracking-wider text-xl drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">8000 / 8000</span>
+                </div>
+            </div>
+
+            <!-- Feedback Log -->
+            <div id="feedback" class="h-8 text-center text-sm font-medium flex items-center justify-center mb-8">
+                <span class="text-zinc-600">En attente de déploiement...</span>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button id="btn-start" onclick="startGame()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-all px-6 py-3.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.42 5.42"/></svg>
+                    Générer une cible
+                </button>
+                <button id="btn-smite" onclick="trySmite()" class="bg-indigo-600 hover:bg-indigo-500 text-white transition-all px-6 py-3.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600 disabled:shadow-none" disabled>
+                    Exécuter (D, F, Espace)
+                </button>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="bg-surface border border-border p-6 rounded-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-zinc-100 flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4v16"/></svg>
+                    Top de la semaine
+                </h2>
+                <span class="text-xs text-zinc-500 bg-zinc-800 px-2 py-1 rounded">Mise à jour automatique</span>
+            </div>
+            <ul id="leaderboard-list" class="flex flex-col gap-2">
+                <li class="text-zinc-500 text-sm py-4 text-center animate-pulse">Chargement des données...</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Minimalist Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 rounded-lg text-sm font-medium text-white shadow-xl opacity-0 transition-all duration-300 z-50 transform translate-y-2 pointer-events-none border border-white/10"></div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
+        // URL de la Google Sheet (Nécessite un lien Apps Script commençant par script.google.com pour fonctionner)
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuk1S7wzprce3et40_UXl15miOseedFQw3TvT3j62d7WnqxmtJG616ja2aWtmkazrO/exec"; 
+        // URL pour lire les scores (Format CSV de votre document)
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/11Ekdo71LxlUFS6FpG1BzD4TVXBnQDxxrYKjIy5mxyPY/export?exportFormat=csv";
+        // ==========================================
+
+        let isRunning = false;
+        let smiteDamage = 0;
+        let hp = 0;
+        let maxHp = 0;
+        let lastTime = 0;
+        let baseDps = 0;
+        let smiteWindowStartTime = 0;
+
+        // Charger le pseudo mémorisé s'il y en a un et le classement au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            const pseudoInput = document.getElementById('pseudo');
+            const savedPseudo = localStorage.getItem('smitool_pseudo');
+            if (savedPseudo) {
+                pseudoInput.value = savedPseudo;
+            }
+
+            // Sauvegarder automatiquement lors de la frappe
+            pseudoInput.addEventListener('input', (e) => {
+                localStorage.setItem('smitool_pseudo', e.target.value.trim().replace(/,/g, ' '));
+            });
+
+            loadLeaderboard();
+            
+            // Rafraîchir le leaderboard toutes les 60 secondes (60000 ms)
+            setInterval(loadLeaderboard, 60000);
+        });
+
+        // Raccourcis clavier
+        document.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            if (['d', 'f', ' '].includes(key)) {
+                if (!document.getElementById('btn-smite').disabled) {
+                    e.preventDefault();
+                    trySmite();
+                }
+            }
+        });
+
+        function startGame() {
+            if(isRunning) return;
+
+            const pseudoInput = document.getElementById('pseudo');
+            // On retire les virgules du pseudo pour ne pas casser la lecture du CSV plus tard
+            const pseudo = pseudoInput.value.trim().replace(/,/g, ' ');
+            
+            if (!pseudo) {
+                showToast("Veuillez entrer un pseudo avant de générer une cible.", true);
+                pseudoInput.focus();
+                return;
+            }
+            localStorage.setItem('smitool_pseudo', pseudo);
+
+            const damages = [600, 1000, 1400];
+            smiteDamage = damages[Math.floor(Math.random() * damages.length)];
+            document.getElementById('smite-dmg-display').textContent = smiteDamage;
+
+            maxHp = 8000 + Math.floor(Math.random() * 4000);
+            hp = maxHp;
+            
+            // DPS réduit pour allonger la durée du combat (entre 400 et 1000 DPS de base)
+            baseDps = 400 + Math.random() * 600; 
+
+            isRunning = true;
+            lastTime = performance.now();
+            smiteWindowStartTime = 0;
+
+            document.getElementById('btn-start').disabled = true;
+            document.getElementById('btn-start').classList.add('opacity-50');
+            
+            document.getElementById('btn-smite').disabled = false;
+
+            document.getElementById('feedback').innerHTML = '<span class="text-zinc-500 animate-pulse">Analyse de la cible en cours...</span>';
+            document.getElementById('arena').classList.remove('shake');
+
+            updateUI();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function gameLoop(time) {
+            if(!isRunning) return;
+
+            let dt = (time - lastTime) / 1000;
+            lastTime = time;
+
+            // Fluctuations légères
+            let currentDps = baseDps * (0.8 + Math.random() * 0.4);
+            hp -= currentDps * dt;
+
+            // Petits bursts aléatoires (réduits par rapport à avant)
+            if (Math.random() < 0.02) {
+                hp -= (Math.random() * 200 + 50);
+            }
+            // Execution quand HP très bas
+            if (hp < 2000 && Math.random() < 0.02) {
+                hp -= (Math.random() * 300);
+            }
+
+            // Logique de vol de l'objectif (0.5s de réaction max)
+            if (hp <= smiteDamage) {
+                if (smiteWindowStartTime === 0) {
+                    smiteWindowStartTime = time;
+                } else if (time - smiteWindowStartTime >= 500) {
+                    hp = 0;
+                    updateUI();
+                    endGame('Échec', 'Objectif volé ! Vous avez mis plus de 0,5s à réagir.', true);
+                    return;
+                }
+            }
+
+            if (hp <= 0) {
+                hp = 0;
+                updateUI();
+                endGame('Échec', 'Cible détruite par un agent externe.', true);
+                return;
+            }
+
+            updateUI();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updateUI() {
+            const displayHp = Math.max(0, Math.round(hp));
+            document.getElementById('hp-text').textContent = `${displayHp} / ${maxHp}`;
+            
+            const pct = Math.max(0, (hp / maxHp) * 100);
+            document.getElementById('hp-fill').style.width = `${pct}%`;
+        }
+
+        function trySmite() {
+            if(!isRunning) return;
+
+            if (hp <= smiteDamage) {
+                let diff = smiteDamage - hp;
+                endGame('Succès', `Précision optimale. Surdégâts : ${Math.round(diff)} PV.`, false, Math.round(diff));
+            } else {
+                let diff = hp - smiteDamage;
+                endGame('Échec', `Exécution prématurée. Cible restante : ${Math.round(diff)} PV.`, true, null);
+            }
+            updateUI();
+        }
+
+        function endGame(status, detailsMsg, isError, diffVal = null) {
+            isRunning = false;
+
+            document.getElementById('btn-start').disabled = false;
+            document.getElementById('btn-start').classList.remove('opacity-50');
+            document.getElementById('btn-smite').disabled = true;
+
+            const feedbackEl = document.getElementById('feedback');
+            const statusColor = isError ? 'text-red-400' : 'text-emerald-400';
+            
+            feedbackEl.innerHTML = `<span class="${statusColor} font-bold mr-2">${status}</span> <span class="text-zinc-400">${detailsMsg}</span>`;
+            
+            if (isError) {
+                document.getElementById('arena').classList.add('shake');
+            }
+
+            saveScore(status, detailsMsg, diffVal);
+        }
+
+        function saveScore(status, details, diffVal) {
+            if (!WEB_APP_URL || WEB_APP_URL.includes("...")) {
+                console.warn("URL Google Apps Script non configurée.");
+                return;
+            }
+
+            const pseudo = document.getElementById('pseudo').value.trim().replace(/,/g, ' ');
+            const timestamp = Date.now();
+
+            const formData = new URLSearchParams();
+            formData.append('date', new Date().toLocaleString('fr-FR'));
+            formData.append('pseudo', pseudo);
+            formData.append('smiteDmg', smiteDamage);
+            formData.append('result', status);
+            formData.append('details', details);
+            formData.append('timestamp', timestamp);
+            formData.append('diff', diffVal !== null ? diffVal : '');
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).then(() => {
+                showToast("Synchronisé avec succès", false);
+                // On recharge le classement après un court délai pour laisser le temps à Google Sheet de se mettre à jour
+                setTimeout(loadLeaderboard, 1500); 
+            }).catch(err => {
+                showToast("Erreur de synchronisation", true);
+            });
+        }
+
+        async function loadLeaderboard() {
+            try {
+                // On rajoute un paramètre temporel aléatoire à l'URL pour forcer Google à ne pas utiliser le cache
+                const response = await fetch(CSV_URL + "&t=" + new Date().getTime());
+                const data = await response.text();
+                parseAndDisplayLeaderboard(data);
+            } catch (error) {
+                console.error("Erreur de récupération du leaderboard", error);
+                document.getElementById('leaderboard-list').innerHTML = '<li class="text-red-400 text-sm py-2 text-center">Impossible de charger le classement.</li>';
+            }
+        }
+
+        function parseAndDisplayLeaderboard(csvText) {
+            const lines = csvText.split('\n');
+            const now = Date.now();
+            const weekMs = 7 * 24 * 60 * 60 * 1000;
+            let scores = [];
+
+            // On commence à 1 pour ignorer la ligne d'en-tête
+            for(let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if(!line) continue;
+                
+                // Séparation par virgule
+                const cols = line.split(',');
+                
+                // On vérifie qu'on a bien toutes nos colonnes (les anciennes parties n'en auront pas assez)
+                if (cols.length >= 7) {
+                    const pseudo = cols[1];
+                    const smiteDmg = cols[2];
+                    const result = cols[3];
+                    const timestamp = parseInt(cols[5], 10);
+                    const diff = parseInt(cols[6], 10);
+
+                    // On ne garde que les "Succès" de moins de 7 jours
+                    if (result === 'Succès' && !isNaN(timestamp) && !isNaN(diff) && (now - timestamp) <= weekMs) {
+                        scores.push({ pseudo, smiteDmg, diff });
+                    }
+                }
+            }
+
+            // Trier par différence (les plus proches de 0 sont les meilleurs)
+            scores.sort((a, b) => a.diff - b.diff);
+            const topScores = scores.slice(0, 5); // Prendre le Top 5
+
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '';
+            
+            if (topScores.length === 0) {
+                list.innerHTML = '<li class="text-zinc-500 text-sm py-4 text-center">Aucun smite parfait cette semaine. Soyez le premier !</li>';
+                return;
+            }
+
+            topScores.forEach((score, index) => {
+                list.innerHTML += `
+                    <li class="flex justify-between items-center bg-zinc-800/40 p-3 rounded-lg border border-zinc-700/50 hover:bg-zinc-800/70 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <span class="${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-zinc-300' : index === 2 ? 'text-amber-600' : 'text-indigo-400'} font-mono font-bold w-4">${index + 1}.</span>
+                            <span class="text-zinc-200 font-medium">${score.pseudo}</span>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-emerald-400 font-bold">+${score.diff} PV</div>
+                            <div class="text-xs text-zinc-500">Smite à ${score.smiteDmg}</div>
+                        </div>
+                    </li>
+                `;
+            });
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = `fixed bottom-6 right-6 px-4 py-3 rounded-lg text-sm font-medium text-white shadow-xl transition-all duration-300 z-50 transform translate-y-0 opacity-100 ${isError ? 'bg-red-500/90 border border-red-500' : 'bg-emerald-500/90 border border-emerald-500'}`;
+            
+            setTimeout(() => {
+                toast.classList.replace('translate-y-0', 'translate-y-2');
+                toast.classList.replace('opacity-100', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
