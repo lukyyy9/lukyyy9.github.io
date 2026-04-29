@@ -222,13 +222,16 @@
             let currentDps = baseDps * (0.8 + Math.random() * 0.4);
             hp -= currentDps * dt;
 
-            // Petits bursts aléatoires (réduits par rapport à avant)
+            // Facteur pour réduire la taille des chunks et du seuil d'exécution en early/mid
+            const dmgScale = smiteDamage / 1400;
+
+            // Petits bursts aléatoires proportionnels au niveau
             if (Math.random() < 0.02) {
-                hp -= (Math.random() * 200 + 50);
+                hp -= (Math.random() * 200 + 50) * dmgScale;
             }
-            // Execution quand HP très bas
-            if (hp < 2000 && Math.random() < 0.02) {
-                hp -= (Math.random() * 300);
+            // Execution quand HP très bas proportionnellement au niveau
+            if (hp < 2000 * dmgScale && Math.random() < 0.02) {
+                hp -= (Math.random() * 300) * dmgScale;
             }
 
             // Logique de vol de l'objectif (0.5s de réaction max)
