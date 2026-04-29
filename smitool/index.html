@@ -48,12 +48,6 @@
             <p class="text-sm text-zinc-500">Module d'entraînement au smite</p>
         </div>
 
-        <!-- Pseudo Input -->
-        <div class="w-full max-w-sm mx-auto flex flex-col gap-2">
-            <label for="pseudo" class="text-sm font-medium text-zinc-400">Pseudo</label>
-            <input type="text" id="pseudo" placeholder="Entrez votre pseudo..." class="bg-surface border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-zinc-600" />
-        </div>
-
         <!-- Application Card -->
         <div id="arena" class="bg-surface/80 backdrop-blur-xl border border-border p-8 rounded-2xl shadow-2xl relative">
             
@@ -113,6 +107,27 @@
     <!-- Minimalist Toast -->
     <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 rounded-lg text-sm font-medium text-white shadow-xl opacity-0 transition-all duration-300 z-50 transform translate-y-2 pointer-events-none border border-white/10"></div>
 
+    <!-- Profile Icon -->
+    <button id="profile-icon" onclick="logout()" class="hidden fixed top-6 right-6 w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-zinc-300 font-bold shadow-lg transition-all hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-500 group z-40">
+        <span id="profile-letter" class="group-hover:hidden">A</span>
+        <svg class="hidden group-hover:block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <!-- Pseudo Modal -->
+    <div id="pseudo-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-surface border border-border p-8 rounded-2xl shadow-2xl w-full max-w-sm transform scale-95 transition-transform duration-300" id="pseudo-modal-content">
+            <h3 class="text-xl font-semibold text-white mb-2">Bienvenue !</h3>
+            <p class="text-sm text-zinc-400 mb-6">Veuillez entrer un pseudo pour enregistrer vos scores dans le classement.</p>
+            
+            <form onsubmit="savePseudo(event)" class="flex flex-col gap-4">
+                <input type="text" id="modal-pseudo-input" placeholder="Votre super pseudo..." class="bg-black/50 border border-zinc-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-zinc-600" required autocomplete="off" />
+                <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white transition-all px-6 py-3 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-500/20">
+                    C'est parti
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // ==========================================
         // CONFIGURATION
@@ -133,22 +148,75 @@
 
         // Charger le pseudo mémorisé s'il y en a un et le classement au démarrage
         document.addEventListener('DOMContentLoaded', () => {
-            const pseudoInput = document.getElementById('pseudo');
             const savedPseudo = localStorage.getItem('smitool_pseudo');
             if (savedPseudo) {
-                pseudoInput.value = savedPseudo;
+                updateProfileIcon(savedPseudo);
+            } else {
+                openPseudoModal();
             }
-
-            // Sauvegarder automatiquement lors de la frappe
-            pseudoInput.addEventListener('input', (e) => {
-                localStorage.setItem('smitool_pseudo', e.target.value.trim().replace(/,/g, ' '));
-            });
 
             loadLeaderboard();
             
             // Rafraîchir le leaderboard toutes les 60 secondes (60000 ms)
             setInterval(loadLeaderboard, 60000);
         });
+
+        function openPseudoModal() {
+            const modal = document.getElementById('pseudo-modal');
+            const content = document.getElementById('pseudo-modal-content');
+            modal.classList.remove('hidden');
+            // Trigger reflow
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+            setTimeout(() => {
+                document.getElementById('modal-pseudo-input').focus();
+            }, 300);
+        }
+
+        function closePseudoModal() {
+            const modal = document.getElementById('pseudo-modal');
+            const content = document.getElementById('pseudo-modal-content');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function savePseudo(e) {
+            e.preventDefault();
+            const input = document.getElementById('modal-pseudo-input');
+            const pseudo = input.value.trim().replace(/,/g, ' ');
+            if (pseudo) {
+                localStorage.setItem('smitool_pseudo', pseudo);
+                updateProfileIcon(pseudo);
+                closePseudoModal();
+                showToast("Pseudo enregistré !");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('smitool_pseudo');
+            document.getElementById('profile-icon').classList.add('hidden');
+            document.getElementById('modal-pseudo-input').value = "";
+            openPseudoModal();
+        }
+
+        function updateProfileIcon(pseudo) {
+            const iconBtn = document.getElementById('profile-icon');
+            const letterSpan = document.getElementById('profile-letter');
+            if(pseudo) {
+                letterSpan.textContent = pseudo.charAt(0).toUpperCase();
+                iconBtn.classList.remove('hidden');
+            } else {
+                iconBtn.classList.add('hidden');
+            }
+        }
 
         // Raccourcis clavier
         document.addEventListener('keydown', (e) => {
@@ -166,16 +234,11 @@
         function startGame() {
             if(isRunning) return;
 
-            const pseudoInput = document.getElementById('pseudo');
-            // On retire les virgules du pseudo pour ne pas casser la lecture du CSV plus tard
-            const pseudo = pseudoInput.value.trim().replace(/,/g, ' ');
-            
-            if (!pseudo) {
-                showToast("Veuillez entrer un pseudo avant de générer une cible.", true);
-                pseudoInput.focus();
+            const savedPseudo = localStorage.getItem('smitool_pseudo');
+            if (!savedPseudo) {
+                openPseudoModal();
                 return;
             }
-            localStorage.setItem('smitool_pseudo', pseudo);
 
             const damages = [600, 1000, 1400];
             smiteDamage = damages[Math.floor(Math.random() * damages.length)];
@@ -302,7 +365,7 @@
                 return;
             }
 
-            const pseudo = document.getElementById('pseudo').value.trim().replace(/,/g, ' ') || 'anonymous';
+            const pseudo = localStorage.getItem('smitool_pseudo') || 'anonymous';
             const timestamp = Date.now();
             const dateStr = new Date().toISOString();
 
