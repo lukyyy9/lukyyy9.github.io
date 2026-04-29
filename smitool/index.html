@@ -182,19 +182,21 @@
             document.getElementById('smite-dmg-display').textContent = smiteDamage;
 
             if (smiteDamage === 600) {
-                // Early game
+                // Early game (20s pour faire 100%)
                 maxHp = 4000 + Math.floor(Math.random() * 2000);
-                baseDps = 200 + Math.random() * 300;
+                baseDps = maxHp / 20;
             } else if (smiteDamage === 1000) {
-                // Mid game
+                // Mid game (17s pour faire 100%)
                 maxHp = 6000 + Math.floor(Math.random() * 3000);
-                baseDps = 300 + Math.random() * 400;
+                baseDps = maxHp / 17;
             } else { 
-                // Late game (1400)
+                // Late game (15s pour faire 100%)
                 maxHp = 8000 + Math.floor(Math.random() * 4000);
-                baseDps = 400 + Math.random() * 600;
+                baseDps = maxHp / 15;
             }
-            hp = maxHp;
+            
+            // L'objectif démarre à 67% de ses PV max pour vous faire gagner du temps
+            hp = maxHp * 0.67;
 
             isRunning = true;
             lastTime = performance.now();
