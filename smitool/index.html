@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smitool - App</title>
+    <title>Smitool</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <script>
@@ -41,10 +42,10 @@
         
         <!-- Header SaaS -->
         <div class="flex flex-col items-center gap-2">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-2">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <div class="h-10 flex items-center justify-center mb-2 overflow-hidden">
+                <img src="./smite.png" alt="Smitool Logo" class="w-full h-full object-cover rounded-xl mr-3" />
+                <h1 class="text-2xl font-semibold text-zinc-100 tracking-tight">Smitool</h1>
             </div>
-            <h1 class="text-2xl font-semibold text-zinc-100 tracking-tight">Smitool</h1>
             <p class="text-sm text-zinc-500">Module d'entraînement au smite</p>
         </div>
 
@@ -61,7 +62,10 @@
 
             <!-- Health Bar Container -->
             <div class="relative w-full h-12 bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800/50 shadow-inner mb-6">
-                <!-- Fill -->
+                <!-- Ghost Fill (Yellow trailing bar) -->
+                <div id="hp-ghost" class="absolute inset-y-0 left-0 bg-yellow-500 transition-none" style="width: 100%"></div>
+                
+                <!-- Main Fill -->
                 <div id="hp-fill" class="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-600 to-red-500 transition-none" style="width: 100%"></div>
                 
                 <!-- Text Overlap -->
@@ -145,6 +149,7 @@
         let lastTime = 0;
         let baseDps = 0;
         let smiteWindowStartTime = 0;
+        let hpGhost = 0; // Ajout de la variable pour la barre jaune
 
         // Charger le pseudo mémorisé s'il y en a un et le classement au démarrage
         document.addEventListener('DOMContentLoaded', () => {
@@ -260,6 +265,7 @@
             
             // L'objectif démarre à 67% de ses PV max pour vous faire gagner du temps
             hp = maxHp * 0.67;
+            hpGhost = hp;
 
             isRunning = true;
             lastTime = performance.now();
@@ -311,10 +317,15 @@
 
             if (hp <= 0) {
                 hp = 0;
+                hpGhost = 0;
                 updateUI();
                 endGame('Échec', 'Cible détruite par un agent externe.', true);
                 return;
             }
+
+            // Faire converger hpGhost vers hp (Lerp) - Vitesse augmentée (de 5 à 15)
+            hpGhost += (hp - hpGhost) * 15 * dt;
+            if (Math.abs(hpGhost - hp) < 1) hpGhost = hp;
 
             updateUI();
             requestAnimationFrame(gameLoop);
@@ -325,7 +336,10 @@
             document.getElementById('hp-text').textContent = `${displayHp} / ${maxHp}`;
             
             const pct = Math.max(0, (hp / maxHp) * 100);
+            const ghostPct = Math.max(0, (hpGhost / maxHp) * 100);
+
             document.getElementById('hp-fill').style.width = `${pct}%`;
+            document.getElementById('hp-ghost').style.width = `${ghostPct}%`;
         }
 
         function trySmite() {
