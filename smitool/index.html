@@ -181,11 +181,20 @@
             smiteDamage = damages[Math.floor(Math.random() * damages.length)];
             document.getElementById('smite-dmg-display').textContent = smiteDamage;
 
-            maxHp = 8000 + Math.floor(Math.random() * 4000);
+            if (smiteDamage === 600) {
+                // Early game
+                maxHp = 4000 + Math.floor(Math.random() * 2000);
+                baseDps = 200 + Math.random() * 300;
+            } else if (smiteDamage === 1000) {
+                // Mid game
+                maxHp = 6000 + Math.floor(Math.random() * 3000);
+                baseDps = 300 + Math.random() * 400;
+            } else { 
+                // Late game (1400)
+                maxHp = 8000 + Math.floor(Math.random() * 4000);
+                baseDps = 400 + Math.random() * 600;
+            }
             hp = maxHp;
-            
-            // DPS réduit pour allonger la durée du combat (entre 400 et 1000 DPS de base)
-            baseDps = 400 + Math.random() * 600; 
 
             isRunning = true;
             lastTime = performance.now();
