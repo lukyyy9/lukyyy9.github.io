@@ -1,0 +1,344 @@
+{
+  "myPool": [
+    "Jax",
+    "Kayle",
+    "Gwen",
+    "Darius",
+    "Warwick",
+    "Mordekaiser",
+    "Irelia"
+  ],
+  "matchups": {
+    "Shen": [
+      "Mordekaiser",
+      "Gwen",
+      "Darius",
+      "Kayle"
+    ],
+    "Darius": [
+      "Jax",
+      "Kayle",
+      "Mordekaiser"
+    ],
+    "Anivia": [
+      "Irelia",
+      "Gwen",
+      "Jax"
+    ],
+    "Sion": [
+      "Gwen",
+      "Darius",
+      "Mordekaiser"
+    ],
+    "Aurora": [
+      "Irelia",
+      "Gwen"
+    ],
+    "Garen": [
+      "Kayle",
+      "Darius",
+      "Mordekaiser",
+      "Warwick"
+    ],
+    "Akali": [
+      "Warwick",
+      "Mordekaiser",
+      "Irelia"
+    ],
+    "Ambessa": [
+      "Warwick",
+      "Irelia",
+      "Darius"
+    ],
+    "Gwen": [
+      "Warwick",
+      "Darius",
+      "Jax"
+    ],
+    "Vayne": [
+      "Kayle",
+      "Gwen"
+    ],
+    "Sett": [
+      "Warwick",
+      "Kayle"
+    ],
+    "Aatrox": [
+      "Irelia",
+      "Warwick",
+      "Gwen",
+      "Kayle"
+    ],
+    "Varus": [
+      "Irelia",
+      "Jax",
+      "Gwen",
+      "Kayle"
+    ],
+    "Camille": [
+      "Warwick",
+      "Jax",
+      "Mordekaiser",
+      "Darius"
+    ],
+    "Cassiopeia": [
+      "Irelia",
+      "Kayle",
+      "Darius"
+    ],
+    "Chogath": [
+      "Gwen",
+      "Irelia",
+      "Mordekaiser"
+    ],
+    "DrMundo": [
+      "Gwen",
+      "Irelia",
+      "Warwick"
+    ],
+    "Fiora": [
+      "Warwick",
+      "Kayle",
+      "Darius"
+    ],
+    "Gnar": [
+      "Irelia",
+      "Gwen"
+    ],
+    "Gragas": [
+      "Irelia",
+      "Darius"
+    ],
+    "Illaoi": [
+      "Mordekaiser",
+      "Gwen",
+      "Kayle"
+    ],
+    "Irelia": [
+      "Jax",
+      "Warwick",
+      "Darius"
+    ],
+    "Jax": [
+      "Darius",
+      "Mordekaiser"
+    ],
+    "Jayce": [
+      "Irelia",
+      "Mordekaiser",
+      "Gwen"
+    ],
+    "KSante": [
+      "Kayle",
+      "Warwick",
+      "Gwen",
+      "Darius"
+    ],
+    "Kayle": [
+      "Irelia",
+      "Jax",
+      "Darius"
+    ],
+    "Gangplank": [
+      "Irelia",
+      "Mordekaiser",
+      "Gwen"
+    ],
+    "Kennen": [
+      "Mordekaiser",
+      "Irelia"
+    ],
+    "Kled": [
+      "Warwick",
+      "Gwen",
+      "Kayle",
+      "Darius"
+    ],
+    "Malphite": [
+      "Mordekaiser",
+      "Gwen",
+      "Darius"
+    ],
+    "Maokai": [
+      "Warwick",
+      "Irelia",
+      "Mordekaiser"
+    ],
+    "MasterYi": [
+      "Warwick",
+      "Jax",
+      "Darius"
+    ],
+    "Mordekaiser": [
+      "Warwick",
+      "Darius",
+      "Jax",
+      "Gwen",
+      "Kayle"
+    ],
+    "Nasus": [
+      "Darius",
+      "Mordekaiser",
+      "Jax"
+    ],
+    "Olaf": [
+      "Jax",
+      "Darius"
+    ],
+    "Pantheon": [
+      "Irelia",
+      "Mordekaiser"
+    ],
+    "Quinn": [
+      "Irelia",
+      "Gwen"
+    ],
+    "Renekton": [
+      "Warwick",
+      "Mordekaiser",
+      "Jax"
+    ],
+    "Rengar": [
+      "Warwick",
+      "Darius",
+      "Mordekaiser",
+      "Irelia",
+      "Jax"
+    ],
+    "Riven": [
+      "Warwick",
+      "Irelia",
+      "Mordekaiser"
+    ],
+    "Rumble": [
+      "Irelia",
+      "Darius",
+      "Gwen"
+    ],
+    "Ryze": [
+      "Irelia",
+      "Gwen",
+      "Jax"
+    ],
+    "TahmKench": [
+      "Mordekaiser",
+      "Gwen",
+      "Warwick"
+    ],
+    "Teemo": [
+      "Irelia",
+      "Jax",
+      "Mordekaiser"
+    ],
+    "Trundle": [
+      "Jax",
+      "Mordekaiser"
+    ],
+    "Tryndamere": [
+      "Darius",
+      "Warwick",
+      "Jax"
+    ],
+    "Urgot": [
+      "Mordekaiser",
+      "Kayle",
+      "Gwen"
+    ],
+    "Vladimir": [
+      "Irelia",
+      "Mordekaiser",
+      "Darius"
+    ],
+    "Volibear": [
+      "Jax",
+      "Kayle",
+      "Mordekaiser"
+    ],
+    "Warwick": [
+      "Darius",
+      "Jax",
+      "Kayle"
+    ],
+    "MonkeyKing": [
+      "Warwick",
+      "Jax",
+      "Mordekaiser"
+    ],
+    "Yasuo": [
+      "Warwick",
+      "Darius",
+      "Jax"
+    ],
+    "Yone": [
+      "Jax",
+      "Irelia",
+      "Darius"
+    ],
+    "Yorick": [
+      "Warwick",
+      "Gwen",
+      "Irelia"
+    ],
+    "Zaahen": [
+      "Jax",
+      "Kayle"
+    ]
+  },
+  "pinnedChampions": [
+    "Aatrox",
+    "Akali",
+    "Ambessa",
+    "Anivia",
+    "Aurora",
+    "Camille",
+    "Cassiopeia",
+    "Chogath",
+    "Darius",
+    "DrMundo",
+    "Fiora",
+    "Gangplank",
+    "Garen",
+    "Gnar",
+    "Gragas",
+    "Gwen",
+    "Illaoi",
+    "Irelia",
+    "Jax",
+    "Jayce",
+    "KSante",
+    "Kayle",
+    "Kennen",
+    "Kled",
+    "Malphite",
+    "MasterYi",
+    "Maokai",
+    "Mordekaiser",
+    "Nasus",
+    "Olaf",
+    "Pantheon",
+    "Quinn",
+    "Renekton",
+    "Rengar",
+    "Riven",
+    "Rumble",
+    "Ryze",
+    "Sett",
+    "Shen",
+    "Sion",
+    "TahmKench",
+    "Teemo",
+    "Trundle",
+    "Tryndamere",
+    "Urgot",
+    "Varus",
+    "Vayne",
+    "Vladimir",
+    "Volibear",
+    "Warwick",
+    "MonkeyKing",
+    "Yasuo",
+    "Yone",
+    "Yorick",
+    "Zaahen"
+  ]
+}
