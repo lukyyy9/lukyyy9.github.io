@@ -56,10 +56,11 @@
       "Jax"
     ],
     "Vayne": [
-      "Kayle",
-      "Gwen"
+      "Gwen",
+      "Kayle"
     ],
     "Sett": [
+      "Mordekaiser",
       "Warwick",
       "Kayle"
     ],
@@ -187,11 +188,13 @@
     ],
     "Pantheon": [
       "Irelia",
+      "Kayle",
       "Mordekaiser"
     ],
     "Quinn": [
       "Irelia",
-      "Gwen"
+      "Mordekaiser",
+      "Warwick"
     ],
     "Renekton": [
       "Warwick",
@@ -232,7 +235,9 @@
     ],
     "Trundle": [
       "Jax",
-      "Mordekaiser"
+      "Darius",
+      "Mordekaiser",
+      "Kayle"
     ],
     "Tryndamere": [
       "Darius",
@@ -275,13 +280,15 @@
       "Darius"
     ],
     "Yorick": [
-      "Warwick",
       "Gwen",
-      "Irelia"
+      "Warwick",
+      "Irelia",
+      "Jax"
     ],
     "Zaahen": [
       "Jax",
-      "Kayle"
+      "Kayle",
+      "Mordekaiser"
     ],
     "Ornn": [
       "Mordekaiser",
