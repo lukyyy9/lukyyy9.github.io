@@ -282,6 +282,22 @@
     "Zaahen": [
       "Jax",
       "Kayle"
+    ],
+    "Ornn": [
+      "Mordekaiser",
+      "Gwen",
+      "Warwick",
+      "Irelia"
+    ],
+    "Poppy": [
+      "Darius",
+      "Kayle",
+      "Mordekaiser"
+    ],
+    "Singed": [
+      "Kayle",
+      "Darius",
+      "Irelia"
     ]
   },
   "pinnedChampions": [
@@ -339,6 +355,9 @@
     "Yasuo",
     "Yone",
     "Yorick",
-    "Zaahen"
+    "Zaahen",
+    "Ornn",
+    "Poppy",
+    "Singed"
   ]
 }
